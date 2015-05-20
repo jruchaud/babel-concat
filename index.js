@@ -56,10 +56,13 @@ exports.babelConcat = function(babelResults, options) {
     };
 
     babelResults.forEach(function(result) {
-        var mapConsumer = new SourceMapConsumer(result.map);
+        if (result.map) {
+            var mapConsumer = new SourceMapConsumer(result.map);
 
-        concactMap(mapConsumer, lastLine);
-        concatContent(mapConsumer);
+            concactMap(mapConsumer, lastLine);
+            concatContent(mapConsumer);
+        }
+
         concatCode(result.code);
     });
 
