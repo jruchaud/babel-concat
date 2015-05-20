@@ -75,7 +75,7 @@ exports.babelConcat = function(babelResults, options) {
 exports.addSourceMapUrlData = function(code, map) {
     var mapString = map.toString();
     var mapBase64 = new Buffer(mapString).toString("base64");
-    var mapData = "/*# " + "sourceMappingURL=data:application/json;base64," + mapBase64 + " */";
+    var mapData = "//# " + "sourceMappingURL=data:application/json;base64," + mapBase64;
 
     return code + "\n" + mapData;
 };
