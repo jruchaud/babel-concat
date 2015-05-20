@@ -1,0 +1,24 @@
+{
+  "name": "babel-concat",
+  "version": "1.0.0",
+  "description": "Use to concat JS files after babel transformation",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jruchaud/babel-concat.git"
+  },
+  "keywords": [
+    "babel",
+    "js",
+    "source map"
+  ],
+  "author": "jruchaud",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jruchaud/babel-concat/issues"
+  },
+  "homepage": "https://github.com/jruchaud/babel-concat#readme"
+}
