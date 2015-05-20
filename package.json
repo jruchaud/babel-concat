@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/jruchaud/babel-concat/issues"
   },
-  "homepage": "https://github.com/jruchaud/babel-concat#readme"
+  "homepage": "https://github.com/jruchaud/babel-concat#readme",
+  "dependencies": {
+    "source-map": "^0.4.2"
+  }
 }
