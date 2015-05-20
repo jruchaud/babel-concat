@@ -6,6 +6,30 @@ var babel = require("babel-core");
 var SourceMapGenerator = sourceMap.SourceMapGenerator;
 var SourceMapConsumer = sourceMap.SourceMapConsumer;
 
+exports.transform = function(codeBlocks, options) {
+    var babelResults = [];
+
+    codeBlocks.forEach(function(block) {
+        var babelResult = babel.transform(block, options);
+        babelResults.push(babelResult);
+    });
+
+    return exports.babelConcat(babelResults, options);
+};
+
+exports.transformFile = function(files, options, callback) {
+    var babelResults = [];
+
+    var deferredResults = [];
+    files.forEach(function(file) {
+         deferredResults.push(babel.transformFile(file, options));
+    });
+
+    Promise.all(deferredResults).then(function(babelResults) {
+        callback(exports.babelConcat(babelResults, options));
+    });
+};
+
 exports.transformFileSync = function(files, options) {
     var babelResults = [];
 
