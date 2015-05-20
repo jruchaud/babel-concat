@@ -1,6 +1,11 @@
 # babel-concat
 Use to concat JS files after babel transformation.
 
+The apis (see API) take a list of files (or blocks of code) instead of a single one and process all the list to return a babel-like object ({code:..., map:...}):
+- code attribute contains the concatenation of all compiled code blocks.
+- map attribute contains a source map object which is the concatenation of each source-map of each given file (or block of code). This is only available if you activated the source-map option.
+
+
 Installation
 ============
 
@@ -12,6 +17,21 @@ var concat = require("babel-concat")
 
 API
 ===
+
+### `transform(codeBlocks, options)` ###
+
+Same as transform from babel except that you give a list of code blocks.
+
+- `codeBlocks` : list of code blocks
+- `options`: see babel options
+
+### `transformFile(files, options, callback)` ###
+
+Same as transformFile from babel with mutilple files.
+
+- `files` : all files to transform
+- `options`: see babel options
+- `callback`: see babel callback
 
 ### `transformFileSync(files, options)` ###
 
