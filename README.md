@@ -10,6 +10,9 @@ Installation
 var concat = require("babel-concat")
 ```
 
+API
+===
+
 ### `transformFileSync(files, options)` ###
 
 Same as transformFileSync from babel with mutilple files.
