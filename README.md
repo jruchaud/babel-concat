@@ -1,2 +1,2 @@
 # babel-concat
-Use to concat JS file after babel transformation. 
+Use to concat JS files after babel transformation. 
