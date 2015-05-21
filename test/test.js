@@ -1,6 +1,6 @@
 "use strict";
 
-var assert = require("assert")
+var assert = require("assert");
 var concat = require("../index.js");
 
 describe("babel-concat", function() {
@@ -14,7 +14,6 @@ describe("babel-concat", function() {
         ], {
             sourceMap: true
         });
-
 
         it("Should return a result with code and map", function() {
             assert.equal(true, !!result);

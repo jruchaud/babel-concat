@@ -1,6 +1,6 @@
 "use strict";
 
-var sourceMap = require("source-map")
+var sourceMap = require("source-map");
 var babel = require("babel-core");
 
 var SourceMapGenerator = sourceMap.SourceMapGenerator;
@@ -18,11 +18,9 @@ exports.transform = function(codeBlocks, options) {
 };
 
 exports.transformFile = function(files, options, callback) {
-    var babelResults = [];
-
     var deferredResults = [];
     files.forEach(function(file) {
-         deferredResults.push(babel.transformFile(file, options));
+        deferredResults.push(babel.transformFile(file, options));
     });
 
     Promise.all(deferredResults).then(function(babelResults) {
@@ -92,7 +90,7 @@ exports.babelConcat = function(babelResults, options) {
 
     return {
         map: map,
-        code: options.sourceMaps == "both" ? exports.addSourceMapUrlData(codes) : codes
+        code: options.sourceMaps === "both" ? exports.addSourceMapUrlData(codes) : codes
     };
 };
 
@@ -105,5 +103,5 @@ exports.addSourceMapUrlData = function(code, map) {
 };
 
 exports.addSourceMapUrl = function(code, url) {
-    return code + "//# " + "sourceMappingURL=" + url
+    return code + "//# " + "sourceMappingURL=" + url;
 };
