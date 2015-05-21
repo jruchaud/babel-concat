@@ -13,20 +13,29 @@ var nonce = function() {
 
 /**
  * When concatenating multiple source map, each one need to have a specific source name,
- * otherwize it will the last source will erase the previous ones
+ * otherwize it will the last source will erase the previous ones.
+ * @param   {String} sourceFileName source file name original from options
+ * @param   {String} code           code associated
+ * @returns {String} a generated source file name unique form each codes
  */
-var processSourceFileName = function(base, block) {
+var processSourceFileName = function(sourceFileName, code) {
 
     // If we're processing a block of code,
     // let's try to find a class name in the block to specify the sourceFileName
 
     var re = /class\s?([^\s]+)(\s?{|\s.*)|\s([^\s]+)\s?=\s?class/;
-    var m = re.exec(block);
+    var m = re.exec(code);
 
-    return (base || "") + (m && m[1] || nonce());
+    return (sourceFileName || "") + (m && m[1] || nonce());
 };
 
-var processOptions = function(options, block) {
+/**
+ * Process the babel options to adapt the options to avoid some issue after transformation.
+ * @param   {Object} options current options for babel
+ * @param   {String} code    code associated
+ * @returns {Object} options really used during transformation
+ */
+var processOptions = function(options, code) {
     var rst = JSON.parse(JSON.stringify(options)); // Let's clone options
 
     // In the case were source maps are activated, we need to make some verifications
@@ -34,14 +43,20 @@ var processOptions = function(options, block) {
     if (rst.sourceMap) {
 
         // 1. If we're processing a block of code, we need to ensure that the block will have a specific source name
-        if (block) {
-            rst.sourceFileName = processSourceFileName(rst.sourceFileName, block);
+        if (code) {
+            rst.sourceFileName = processSourceFileName(rst.sourceFileName, code);
         }
     }
 
     return rst;
 };
 
+/**
+ * Same as transform from babel except that you give a list of code blocks.
+ * @param   {Array}  codeBlocks list of code blocks
+ * @param   {Object} options    see babel options
+ * @returns {Object} return an object with the code and map of all codes
+ */
 exports.transform = function(codeBlocks, options) {
     var babelResults = [];
 
@@ -53,6 +68,13 @@ exports.transform = function(codeBlocks, options) {
     return exports.babelConcat(babelResults, options);
 };
 
+/**
+ * Same as transformFile from babel with mutilple files.
+ * @param {Array}    files    all files to transform
+ * @param {Object}   options  see babel options
+ * @param {Function} callback call the function after transform with parameter
+ *                            an object with the code and map of all files
+ */
 exports.transformFile = function(files, options, callback) {
     var deferredResults = [];
     files.forEach(function(file) {
@@ -64,6 +86,12 @@ exports.transformFile = function(files, options, callback) {
     });
 };
 
+/**
+ * Same as transformFileSync from babel with mutilple files.
+ * @param   {Array}  files   all files to transform
+ * @param   {Object} options see babel options
+ * @returns {Object} return an object with the code and map of all files
+ */
 exports.transformFileSync = function(files, options) {
     var babelResults = [];
 
@@ -75,6 +103,13 @@ exports.transformFileSync = function(files, options) {
     return exports.babelConcat(babelResults, options);
 };
 
+/**
+ * Concat all result with code and map from babel transform.
+ * @param   {Array}  babelResults all results from babel an array of
+ *                              object contain code and map
+ * @param   {Object} options      options see babel options
+ * @returns {Object} return an object with the code and map of all results
+ */
 exports.babelConcat = function(babelResults, options) {
 
     var map = new SourceMapGenerator();
@@ -131,6 +166,12 @@ exports.babelConcat = function(babelResults, options) {
     };
 };
 
+/**
+ * Insert the source map as data in the code.
+ * @param   {String} code code where insert the source map
+ * @param   {Object} map  map represents the source map for the code
+ * @returns {String} the code with the source map data
+ */
 exports.addSourceMapUrlData = function(code, map) {
     var mapString = map.toString();
     var mapBase64 = new Buffer(mapString).toString("base64");
@@ -139,6 +180,12 @@ exports.addSourceMapUrlData = function(code, map) {
     return code + "\n" + mapData;
 };
 
+/**
+ * Insert the source map as url in the code
+ * @param   {String} code code where insert the source map
+ * @param   {String} url  url to find the source map
+ * @returns {String} the code with the source map url
+ */
 exports.addSourceMapUrl = function(code, url) {
     return code + "//# " + "sourceMappingURL=" + url;
 };
