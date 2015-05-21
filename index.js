@@ -40,11 +40,18 @@ var processOptions = function(options, code) {
 
     // In the case were source maps are activated, we need to make some verifications
 
-    if (rst.sourceMap) {
+    if (rst.sourceMaps) {
 
         // 1. If we're processing a block of code, we need to ensure that the block will have a specific source name
         if (code) {
             rst.sourceFileName = processSourceFileName(rst.sourceFileName, code);
+        }
+
+        // 2. If the sourceMap options equals to "inline" or "both", we need to set it to true before processing babel transform
+        // otherwize, the sourceMapUrl will be added by babel to the generated code of each file / block of code.
+        // We will take care to handle the "inline" or "both" specification when the concatenated code has been fully generated
+        if (rst.sourceMaps === "inline" || rst.sourceMaps === "both") {
+            rst.sourceMaps = true;
         }
     }
 
@@ -101,7 +108,7 @@ exports.transformFileSync = function(files, options) {
     var babelResults = [];
 
     files.forEach(function(file) {
-        var babelResult = babel.transformFileSync(file, options);
+        var babelResult = babel.transformFileSync(file, processOptions(options));
         babelResults.push(babelResult);
     });
 
@@ -167,7 +174,7 @@ exports.babelConcat = function(babelResults, options) {
 
     return {
         map: map,
-        code: options.sourceMaps === "both" ? exports.addSourceMapUrlData(codes) : codes
+        code: options.sourceMaps === "both" ? exports.addSourceMapUrlData(codes, map) : codes
     };
 };
 

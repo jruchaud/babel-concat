@@ -13,7 +13,7 @@ describe("babel-concat", function() {
             "test/files/File2.js",
             "test/files/File3.js"
         ], {
-            sourceMap: true
+            sourceMaps: true
         });
 
         it("Should return a result with code and map", function() {
@@ -37,7 +37,7 @@ describe("babel-concat", function() {
             file2,
             file3
         ], {
-            sourceMap: true
+            sourceMaps: "both"
         });
 
         it("Should return a result with code and map", function() {
