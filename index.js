@@ -78,7 +78,12 @@ exports.transform = function(codeBlocks, options) {
 exports.transformFile = function(files, options, callback) {
     var deferredResults = [];
     files.forEach(function(file) {
-        deferredResults.push(babel.transformFile(file, processOptions(options)));
+        var promise = new Promise(function(resolve) {
+            babel.transformFile(file, processOptions(options), function(e, r) {
+                resolve(r);
+            });
+        });
+        deferredResults.push(promise);
     });
 
     Promise.all(deferredResults).then(function(babelResults) {

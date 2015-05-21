@@ -49,4 +49,23 @@ describe("babel-concat", function() {
             assert.equal(3, Object.keys(result.map._sourcesContents).length);
         });
     });
+
+    describe("#transformFile()", function() {
+
+        it("Should return a result with code and map", function(done) {
+            concat.transformFile([
+                "test/files/File1.js",
+                "test/files/File2.js",
+                "test/files/File3.js"
+            ], {
+                sourceMaps: true
+            }, function(result) {
+                done();
+                assert.equal(true, !!result);
+                assert.equal(true, !!result.code);
+                assert.equal(true, !!result.map);
+                assert.equal(3, Object.keys(result.map._sourcesContents).length);
+            });
+        });
+    });
 });
