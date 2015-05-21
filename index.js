@@ -6,11 +6,47 @@ var babel = require("babel-core");
 var SourceMapGenerator = sourceMap.SourceMapGenerator;
 var SourceMapConsumer = sourceMap.SourceMapConsumer;
 
+var nonceVal = Date.now();
+var nonce = function() {
+    return nonceVal++;
+};
+
+/**
+ * When concatenating multiple source map, each one need to have a specific source name,
+ * otherwize it will the last source will erase the previous ones
+ */
+var processSourceFileName = function(base, block) {
+
+    // If we're processing a block of code,
+    // let's try to find a class name in the block to specify the sourceFileName
+
+    var re = /class\s?([^\s]+)(\s?{|\s.*)|\s([^\s]+)\s?=\s?class/;
+    var m = re.exec(block);
+
+    return (base || "") + (m && m[1] || nonce());
+};
+
+var processOptions = function(options, block) {
+    var rst = JSON.parse(JSON.stringify(options)); // Let's clone options
+
+    // In the case were source maps are activated, we need to make some verifications
+
+    if (rst.sourceMap) {
+
+        // 1. If we're processing a block of code, we need to ensure that the block will have a specific source name
+        if (block) {
+            rst.sourceFileName = processSourceFileName(rst.sourceFileName, block);
+        }
+    }
+
+    return rst;
+};
+
 exports.transform = function(codeBlocks, options) {
     var babelResults = [];
 
     codeBlocks.forEach(function(block) {
-        var babelResult = babel.transform(block, options);
+        var babelResult = babel.transform(block, processOptions(options, block));
         babelResults.push(babelResult);
     });
 
@@ -20,7 +56,7 @@ exports.transform = function(codeBlocks, options) {
 exports.transformFile = function(files, options, callback) {
     var deferredResults = [];
     files.forEach(function(file) {
-        deferredResults.push(babel.transformFile(file, options));
+        deferredResults.push(babel.transformFile(file, processOptions(options)));
     });
 
     Promise.all(deferredResults).then(function(babelResults) {
@@ -45,6 +81,7 @@ exports.babelConcat = function(babelResults, options) {
     var lastLine = 0;
 
     var concactMap = function(mapConsumer, offset) {
+
         mapConsumer.eachMapping(function(callback) {
             map.addMapping({
                 source: callback.source,
