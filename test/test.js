@@ -10,8 +10,8 @@ describe("babel-concat", function() {
 
         var result = concat.transformFileSync([
             "test/files/File1.js",
-            "test/files/File1.js",
-            "test/files/File1.js"
+            "test/files/File2.js",
+            "test/files/File3.js"
         ], {
             sourceMap: true
         });
@@ -21,6 +21,10 @@ describe("babel-concat", function() {
             assert.equal(true, !!result.code);
             assert.equal(true, !!result.map);
         });
+        it("Source map content should contain each file content", function() {
+            assert.equal(3, Object.keys(result.map._sourcesContents).length);
+        });
+
     });
 
     describe("#transform", function() {
@@ -40,6 +44,9 @@ describe("babel-concat", function() {
             assert.equal(true, !!result);
             assert.equal(true, !!result.code);
             assert.equal(true, !!result.map);
+        });
+        it("Source map content should contain each block of code", function() {
+            assert.equal(3, Object.keys(result.map._sourcesContents).length);
         });
     });
 });
