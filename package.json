@@ -24,6 +24,9 @@
   "dependencies": {
     "babel-core": "^5.4.4",
     "source-map": "^0.4.2",
-    "fs":"0.0.2"
+    "fs": "0.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5"
   }
 }
