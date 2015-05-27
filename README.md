@@ -13,6 +13,11 @@ Installation
 
 ```js
 var concat = require("babel-concat")
+
+Usage example :
+var rst = concat.transformFileSync([path1, path2, ..., pathN], options)
+rst.code // gives the concatenation of file1, file2, ..., fileN after they have been processed by Babel
+rst.map // gives you a source map, concatenation of the generated source-map of each file (only if the source-maps option has been set to true, inline or both => see babel documentation)
 ```
 
 API
