@@ -1,7 +1,7 @@
 "use strict";
 
 var sourceMap = require("source-map");
-var babel = require("babel-core");
+var babel = require("@babel/core");
 
 var SourceMapGenerator = sourceMap.SourceMapGenerator;
 var SourceMapConsumer = sourceMap.SourceMapConsumer;
@@ -174,7 +174,7 @@ exports.babelConcat = function(babelResults, options) {
 
     return {
         map: map,
-        code: options.sourceMaps === "both" ? exports.addSourceMapUrlData(codes, map) : codes
+        code: options.sourceMaps ? exports.addSourceMapUrlData(codes, map) : codes
     };
 };
 
