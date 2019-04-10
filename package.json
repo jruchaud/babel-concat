@@ -1,29 +1,30 @@
 {
-  "name": "babel-concat",
-  "version": "1.0.3",
-  "description": "Use to concat JS files after babel transformation",
+  "name": "babel-concat-sourcemaps",
+  "version": "1.0.0",
+  "description": "Use to concat JS files with sourcemaps after babel transformation",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jruchaud/babel-concat.git"
+    "url": "git://github.com/Genenenenaam/babel-concat-sourcemaps.git"
   },
   "keywords": [
     "babel",
     "js",
+    "concat",
     "source map"
   ],
-  "author": "jruchaud",
+  "author": "Genenenenaam",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jruchaud/babel-concat/issues"
+    "url": "https://github.com/Genenenenaam/babel-concat-sourcemaps/issues"
   },
-  "homepage": "https://github.com/jruchaud/babel-concat#readme",
+  "homepage": "https://github.com/Genenenenaam/babel-concat-sourcemaps#readme",
   "dependencies": {
     "@babel/core": "^7.1.0",
-    "source-map": "^0.4.2",
+    "source-map": "^0.7.3",
     "fs": "0.0.2"
   },
   "devDependencies": {
